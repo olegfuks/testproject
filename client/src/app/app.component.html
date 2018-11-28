@@ -1,0 +1,32 @@
+<div class="list">
+  <input [(ngModel)]="searchText">
+  <button type="submit" (click)="searchByName(searchText)">Server call</button>
+  <ul>
+    <li *ngFor="let employee of employees | search: searchText | paginate: { itemsPerPage: 10, currentPage: p }">
+      <button (click)="onSelect(employee)">Edit</button>
+      <span> {{ employee.id }} {{ employee.name }} {{ employee.active }} <span *ngIf="employee.department">{{ employee.department.name }}</span></span>
+      <button (click)="removeEmployee(employee.id)">Delete</button>
+    </li>
+  </ul>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+  <div *ngIf="selectedEmployee">
+    <h2>{{selectedEmployee.name | uppercase}} Details</h2>
+    <div><span>id: </span>{{selectedEmployee.id}}</div>
+    <div>
+      <label>name:</label>
+      <input [(ngModel)]="selectedEmployee.name" placeholder="name"><span *ngIf="nameUpdateError">Name should have at least 2 characters</span><br>
+        <span>active</span><input type="checkbox" [(ngModel)]="selectedEmployee.active"><br>
+        <select [(ngModel)]="selectedEmployee.department">
+          <option *ngFor="let department of departments" [ngValue]="department">{{ department.name }}</option>
+        </select>
+    </div>
+    <button (click)="updateEmployee(selectedEmployee)">Save</button>
+    <button (click)="cancelEdit()">Cancel</button>
+  </div>
+</div>
+
+
+
+
+
