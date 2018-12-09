@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TestService} from './test.service';
 import {Employee} from './Employee';
 import {Department} from './Department';
+import {EmployeeDTO} from './EmployeeDTO';
 
 
 @Component({
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
       () => {
         this.employees = this.employees
           .filter(employee => employee.id !== id);
-        if (this.selectedEmployee !== null && id === this.selectedEmployee.id) {
+        if ((this.selectedEmployee !== null || this.selectedEmployee !== undefined) && id === this.selectedEmployee.id) {
           this.selectedEmployee = null;
         }
       });
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit {
   }
   updateEmployee(employee: Employee) {
     console.log(employee);
-    this.service.updateEmployee(employee).subscribe(() => {
+    this.service.updateEmployee(new EmployeeDTO(employee)).subscribe(() => {
       }, error => this.nameUpdateError = true,
       () => {
       this.ngOnInit();

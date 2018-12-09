@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Employee} from './Employee';
+import {EmployeeDTO} from './EmployeeDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class TestService {
   searchByName(searchText: string): Observable<any> {
     return this.http.get('http://localhost:8080/employee/' + searchText);
   }
-  updateEmployee(employee: Employee): Observable<any> {
+  updateEmployee(employee: EmployeeDTO): Observable<any> {
     return this.http.put('http://localhost:8080/employee', employee);
   }
   deleteEmployee(id: number): Observable<any> {
