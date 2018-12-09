@@ -1,12 +1,15 @@
 package test.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import test.server.dto.EmployeeDTO;
 import test.server.entity.Employee;
 import test.server.error.EmployeeNotFoundException;
+import test.server.repository.EmployeeRepository;
 import test.server.service.EmployeeService;
 
 import javax.validation.Valid;
@@ -20,9 +23,9 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping
-    public ResponseEntity<List<Employee>> findAllEmployees() {
-        return new ResponseEntity<>(employeeService.findAll(), HttpStatus.OK);
+    @GetMapping("page/{page}")
+    public ResponseEntity<Page<Employee>> findEmployees(@PathVariable("page") Integer page) {
+        return new ResponseEntity<>(employeeService.findEmployees(page), HttpStatus.OK);
     }
 
     @GetMapping("/{searchText}")
@@ -33,7 +36,7 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEmployee(@PathVariable("id") Long id){
         employeeService.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping

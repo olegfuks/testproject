@@ -2,13 +2,13 @@
   <input [(ngModel)]="searchText">
   <button type="submit" (click)="searchByName(searchText)">Server call</button>
   <ul>
-    <li *ngFor="let employee of employees | search: searchText | paginate: { itemsPerPage: 10, currentPage: p }">
+    <li *ngFor="let employee of employees | search: searchText | paginate: { itemsPerPage: 10, currentPage: page, totalItems: totalItems}">
       <button (click)="onSelect(employee)">Edit</button>
       <span> {{ employee.id }} {{ employee.name }} {{ employee.active }} <span *ngIf="employee.department">{{ employee.department.name }}</span></span>
       <button (click)="removeEmployee(employee.id)">Delete</button>
     </li>
   </ul>
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <pagination-controls (pageChange)="page = pageChange($event)"></pagination-controls>
 
   <div *ngIf="selectedEmployee">
     <h2>{{selectedEmployee.name | uppercase}} Details</h2>

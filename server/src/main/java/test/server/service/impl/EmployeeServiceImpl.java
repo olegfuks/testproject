@@ -1,6 +1,8 @@
 package test.server.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.server.dto.EmployeeDTO;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private static int ITEMS_PER_PAGE = 10;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -37,8 +41,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public Page<Employee> findEmployees(Integer page) {
+        return employeeRepository.findAll(PageRequest.of(page - 1, ITEMS_PER_PAGE));
     }
 
     @Override

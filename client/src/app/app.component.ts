@@ -17,13 +17,18 @@ export class AppComponent implements OnInit {
   departments: Department[];
   selectedEmployee: Employee;
   searchText: string;
+  page: number;
+  totalItems: number;
   constructor(private service: TestService) { }
   ngOnInit() {
+    this.page = 1;
     this.nameUpdateError = false;
     this.searchText = '';
-      this.service.findAllEmployees()
+      this.service.findEmployees(this.page)
         .subscribe((data: any) => {
-          this.employees = data;
+          console.log(data);
+          this.employees = data.content;
+          this.totalItems = data.totalElements;
         });
   }
   onSelect(employee: Employee): void {
@@ -38,11 +43,8 @@ export class AppComponent implements OnInit {
     this.service.deleteEmployee(id).subscribe(() => {
       }, error => console.log(error),
       () => {
-        this.employees = this.employees
-          .filter(employee => employee.id !== id);
-        if ((this.selectedEmployee !== null || this.selectedEmployee !== undefined) && id === this.selectedEmployee.id) {
+        this.ngOnInit();
           this.selectedEmployee = null;
-        }
       });
   }
   searchByName(searchText: string) {
@@ -64,5 +66,15 @@ export class AppComponent implements OnInit {
   cancelEdit() {
     this.nameUpdateError = false;
     this.selectedEmployee = null;
+  }
+  pageChange($event) {
+    this.page = $event;
+    this.service.findEmployees(this.page)
+      .subscribe((data: any) => {
+        console.log(data);
+        this.employees = data.content;
+        this.totalItems = data.totalElements;
+      });
+    return $event;
   }
 }

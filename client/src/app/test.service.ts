@@ -10,8 +10,8 @@ export class TestService {
 
   constructor(private http: HttpClient) { }
 
-  findAllEmployees(): Observable<any> {
-    return this.http.get('http://localhost:8080/employee');
+  findEmployees(page: number): Observable<any> {
+    return this.http.get('http://localhost:8080/employee/page/' + page);
   }
   findAllDepartments(): Observable<any> {
     return this.http.get('http://localhost:8080/department');
