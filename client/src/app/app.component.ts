@@ -16,14 +16,13 @@ export class AppComponent implements OnInit {
   employees: Employee[];
   departments: Department[];
   selectedEmployee: Employee;
-  searchText: string;
+  searchText = '';
   page: number;
   totalItems: number;
   constructor(private service: TestService) { }
   ngOnInit() {
     this.page = 1;
     this.nameUpdateError = false;
-    this.searchText = '';
       this.service.findEmployees(this.page)
         .subscribe((data: any) => {
           console.log(data);
@@ -48,9 +47,11 @@ export class AppComponent implements OnInit {
       });
   }
   searchByName(searchText: string) {
-    this.service.searchByName(searchText)
+    this.page = 1;
+    this.service.searchByName(this.page, searchText)
       .subscribe((data: any) => {
-        this.employees = data;
+        this.employees = data.content;
+        this.totalItems = data.totalElements;
       });
   }
   updateEmployee(employee: Employee) {
@@ -69,12 +70,20 @@ export class AppComponent implements OnInit {
   }
   pageChange($event) {
     this.page = $event;
-    this.service.findEmployees(this.page)
-      .subscribe((data: any) => {
-        console.log(data);
-        this.employees = data.content;
-        this.totalItems = data.totalElements;
-      });
+    if (this.searchText === '') {
+      this.service.findEmployees(this.page)
+        .subscribe((data: any) => {
+          console.log(data);
+          this.employees = data.content;
+          this.totalItems = data.totalElements;
+        });
+    } else {
+      this.service.searchByName(this.page, this.searchText)
+        .subscribe((data: any) => {
+          this.employees = data.content;
+          this.totalItems = data.totalElements;
+        });
+    }
     return $event;
   }
 }

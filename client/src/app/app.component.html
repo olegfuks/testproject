@@ -2,7 +2,7 @@
   <input [(ngModel)]="searchText">
   <button type="submit" (click)="searchByName(searchText)">Server call</button>
   <ul>
-    <li *ngFor="let employee of employees | search: searchText | paginate: { itemsPerPage: 10, currentPage: page, totalItems: totalItems}">
+    <li *ngFor="let employee of employees | paginate: { itemsPerPage: 10, currentPage: page, totalItems: totalItems}">
       <button (click)="onSelect(employee)">Edit</button>
       <span> {{ employee.id }} {{ employee.name }} {{ employee.active }} <span *ngIf="employee.department">{{ employee.department.name }}</span></span>
       <button (click)="removeEmployee(employee.id)">Delete</button>

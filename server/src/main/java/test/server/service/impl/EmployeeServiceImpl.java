@@ -12,8 +12,6 @@ import test.server.repository.DepartmentRepository;
 import test.server.repository.EmployeeRepository;
 import test.server.service.EmployeeService;
 
-import java.util.List;
-
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -46,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByNameStartsWith(String name) {
-        return employeeRepository.findEmployeesByNameStartsWith(name);
+    public Page<Employee> findByNameStartsWith(String name, Integer page) {
+        return employeeRepository.findEmployeesByNameStartsWith(name, PageRequest.of(page - 1, ITEMS_PER_PAGE));
     }
 }

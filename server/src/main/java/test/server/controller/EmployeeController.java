@@ -2,18 +2,15 @@ package test.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import test.server.dto.EmployeeDTO;
 import test.server.entity.Employee;
 import test.server.error.EmployeeNotFoundException;
-import test.server.repository.EmployeeRepository;
 import test.server.service.EmployeeService;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -23,14 +20,15 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("page/{page}")
+    @GetMapping("{page}")
     public ResponseEntity<Page<Employee>> findEmployees(@PathVariable("page") Integer page) {
         return new ResponseEntity<>(employeeService.findEmployees(page), HttpStatus.OK);
     }
 
-    @GetMapping("/{searchText}")
-    public ResponseEntity<List<Employee>> searchEmployeesByName(@PathVariable("searchText") String name) {
-        return new ResponseEntity<>(employeeService.findByNameStartsWith(name), HttpStatus.OK);
+    @GetMapping("{page}/{searchText}")
+    public ResponseEntity<Page<Employee>> searchEmployeesByName(@PathVariable("page") Integer page,
+                                                                @PathVariable("searchText") String name) {
+        return new ResponseEntity<>(employeeService.findByNameStartsWith(name, page), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
